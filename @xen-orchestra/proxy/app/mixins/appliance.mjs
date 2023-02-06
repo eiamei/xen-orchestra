@@ -153,10 +153,10 @@ export default class Appliance {
 
   // A proxy can be bound to a unique license
   getSelfLicense() {
-    return Disposable.use(getUpdater(), async updater => {
-      const licenses = await updater.call('getSelfLicenses')
-      const now = Date.now()
-      return licenses.find(({ expires }) => expires === undefined || expires > now)
-    })
+    // return Disposable.use(getUpdater(), async updater => {
+    //   const licenses = await updater.call('getSelfLicenses')
+    //   const now = Date.now()
+    //   return licenses.find(({ expires }) => expires === undefined || expires > now)
+    // })
   }
 }

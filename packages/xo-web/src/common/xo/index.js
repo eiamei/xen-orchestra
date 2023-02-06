@@ -229,43 +229,45 @@ const createSubscription = (cb, { polling = 5e3 } = {}) => {
     if (running) {
       return
     }
+    cb()
+      .then(() => {running = false;})
+      .catch((e) => {running = false})
+    // running = true
+    // _signIn
+    //   .then(() => cb())
+    //   .then(
+    //     result => {
+    //       running = false
 
-    running = true
-    _signIn
-      .then(() => cb())
-      .then(
-        result => {
-          running = false
+    //       if (nActiveSubscribers === 0) {
+    //         return uninstall()
+    //       }
 
-          if (nActiveSubscribers === 0) {
-            return uninstall()
-          }
+    //       timeout = setTimeout(run, delay)
 
-          timeout = setTimeout(run, delay)
+    //       if (!isEqual(result, cache)) {
+    //         cache = result
 
-          if (!isEqual(result, cache)) {
-            cache = result
+    //         forEach(subscribers, subscriber => {
+    //           // A subscriber might have disappeared during iteration.
+    //           //
+    //           // E.g.: if a subscriber triggers the subscription of another.
+    //           if (subscriber) {
+    //             subscriber(result)
+    //           }
+    //         })
+    //       }
+    //     },
+    //     error => {
+    //       running = false
 
-            forEach(subscribers, subscriber => {
-              // A subscriber might have disappeared during iteration.
-              //
-              // E.g.: if a subscriber triggers the subscription of another.
-              if (subscriber) {
-                subscriber(result)
-              }
-            })
-          }
-        },
-        error => {
-          running = false
+    //       if (nActiveSubscribers === 0) {
+    //         return uninstall()
+    //       }
 
-          if (nActiveSubscribers === 0) {
-            return uninstall()
-          }
-
-          console.error(error)
-        }
-      )
+    //       console.error(error)
+    //     }
+    //   )
   }
 
   const subscribe = cb => {
@@ -290,9 +292,9 @@ const createSubscription = (cb, { polling = 5e3 } = {}) => {
   }
 
   subscribe.forceRefresh = () => {
-    if (hasSubscribers()) {
-      run()
-    }
+    // if (hasSubscribers()) {
+    //   run()
+    // }
   }
 
   subscribe.lazy = cb => {
@@ -3248,9 +3250,24 @@ export const updateXosanPacks = pool =>
 
 // Licenses --------------------------------------------------------------------
 
-export const getLicenses = ({ productType } = {}) => _call('xoa.licenses.getAll', { productType })
+// export const getLicenses = ({ productType } = {}) => _call('xoa.licenses.getAll', { productType })
+export const getLicenses = ({ productType } = {}) => ([{
+  productType: 'xoproxy',
+  expires: undefiend,
+  buyer: 'The one who fucked this up',
+  id: '2031023012',
+  boundObjectId: null
+}])
 
-export const getLicense = (productId, boundObjectId) => _call('xoa.licenses.get', { productId, boundObjectId })
+// export const getLicense = (productId, boundObjectId) => _call('xoa.licenses.get', { productId, boundObjectId })
+export const getLicense = (productId, boundObjectId) => ({
+  productType: 'xoproxy',
+  expires: undefiend,
+  buyer: 'The one who fucked this up',
+  id: '2031023012',
+  boundObjectId: boundObjectId
+})
+
 
 export const unlockXosan = (licenseId, srId) => _call('xosan.unlock', { licenseId, sr: srId })
 
